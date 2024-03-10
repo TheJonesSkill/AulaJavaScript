@@ -1,0 +1,245 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Funcionários</title>
+    <!-- Link para o CSS do Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Estilos personalizados -->
+    <style>
+        /* Estilos para cabeçalho e rodapé */
+        header, footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+        /* Estilo para o corpo */
+        main {
+            margin-top: 80px; /* Ajuste de margem para o cabeçalho */
+            margin-bottom: 50px; /* Ajuste de margem para o rodapé */
+        }
+        input[type="text"],
+        input[type="number"],
+        select {
+            margin-bottom: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header class="bg-dark text-white">
+        <div class="container">
+            <h1>Cadastro de Funcionários</h1>
+        </div>
+    </header>
+    <!-- Corpo -->
+    <main class="container mt-5">
+        <form id="formFuncionario">
+            <div class="form-group row">
+              <label for="nome" class="col-sm-2 col-form-label">Nome:</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="nome" placeholder="Nome" required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="idade" class="col-sm-2 col-form-label">Idade:</label>
+              <div class="col-sm-4">
+                <input type="number" class="form-control" id="idade" placeholder="Idade" required>
+              </div>
+              <label for="cargo" class="col-sm-2 col-form-label">Cargo:</label>
+              <div class="col-sm-4">
+                <select id="cargo" required class="form-control">
+                    <option value="">Selecionar</option>
+                    <option value="gerente">Gerente</option>
+                    <option value="desenvolvedor">Desenvolvedor</option>
+                </select>
+              </div>
+            </div>
+            <div id="extraFields" class="form-group row"></div>
+            <div class="form-group row">
+              <div class="col-sm-10 offset-sm-2">
+                <button type="submit" id="submitButton" class="btn btn-primary" disabled>Cadastrar</button>
+              </div>
+            </div>
+        </form>
+        <br>
+        <div id="output"></div>
+    </main>
+    <!-- Rodapé -->
+    <footer class="bg-dark text-white">
+        <div class="container">
+            &copy; <span id="currentYear"></span> Atividade DOM
+        </div>
+    </footer>
+</body>
+    <script>
+        class Funcionario {
+            constructor(nome, idade, cargo) {
+                this.nome = nome;
+                this.idade = idade;
+                this.cargo = cargo;
+            }
+
+            seApresentar() {
+                return `Olá, meu nome é ${this.nome} tenho ${this.idade} anos e sou um ${this.cargo}.`;
+            }
+
+            trabalhar() {
+                return `${this.nome} está trabalhando.`;
+            }
+        }
+
+        class Gerente extends Funcionario {
+            constructor(nome, idade, departamento) {
+                super(nome, idade, 'Gerente');
+                this.departamento = departamento;
+            }
+
+            gerenciar() {
+                return `${this.nome} está gerenciando o departamento de ${this.departamento}.`;
+            }
+        }
+
+        class Desenvolvedor extends Funcionario {
+            constructor(nome, idade, linguagem) {
+                super(nome, idade, 'Desenvolvedor');
+                this.linguagem = linguagem;
+            }
+
+            programar() {
+                return `${this.nome} está programando em ${this.linguagem}.`;
+            }
+        }
+
+        document.getElementById('cargo').addEventListener('change', function() {
+            const submitButton = document.getElementById('submitButton');
+            const cargoSelecionado = this.value;
+            const extraFieldsDiv = document.getElementById('extraFields');
+            extraFieldsDiv.innerHTML = ''; // Limpa o conteúdo anterior, se houver
+            if (cargoSelecionado === 'gerente') {
+                const departamentoSelect = document.createElement('select');
+                departamentoSelect.id = 'departamento';
+                departamentoSelect.name = 'departamento';
+                departamentoSelect.required = true;
+                const departamentos = ['Rh', 'Ti', 'Compras'];
+                departamentos.forEach(departamento => {
+                    const option = document.createElement('option');
+                    option.value = departamento;
+                    option.textContent = departamento;
+                    departamentoSelect.appendChild(option);
+                });
+                extraFieldsDiv.appendChild(departamentoSelect);
+            } else if (cargoSelecionado === 'desenvolvedor') {
+                const linguagemSelect = document.createElement('select');
+                linguagemSelect.id = 'linguagem';
+                linguagemSelect.name = 'linguagem';
+                linguagemSelect.required = true;
+                const linguagens = ['JavaScript', 'Python', 'C++'];
+                linguagens.forEach(linguagem => {
+                    const option = document.createElement('option');
+                    option.value = linguagem;
+                    option.textContent = linguagem;
+                    linguagemSelect.appendChild(option);
+                });
+                extraFieldsDiv.appendChild(linguagemSelect);
+            }
+            verificarCampos();
+        });
+
+        function verificarCampos() {
+            const nome = document.getElementById('nome').value;
+            const idade = document.getElementById('idade').value;
+            const cargo = document.getElementById('cargo').value;
+            let departamentoValido = true;
+            let linguagemValida = true;
+
+            if (cargo === 'gerente') {
+                departamentoValido = !!document.getElementById('departamento').value;
+            } else if (cargo === 'desenvolvedor') {
+                linguagemValida = !!document.getElementById('linguagem').value;
+            }
+
+            const submitButton = document.getElementById('submitButton');
+            submitButton.disabled = !(nome && idade && cargo && departamentoValido && linguagemValida);
+        }
+
+        document.getElementById('formFuncionario').addEventListener('submit', function(event) {
+        event.preventDefault();
+            try {
+            const nome = document.getElementById('nome').value;
+            const idade = document.getElementById('idade').value;
+            const cargo = document.getElementById('cargo').value;
+
+            // Verifica se o nome contém apenas letras e espaços
+            if (!/^[a-zA-Z\s]+$/.test(nome)) {
+                throw new Error('Por favor, insira um nome válido.');
+            }
+            // Verifica se a idade é maior que 18 anos
+            if (parseInt(idade) < 18) {
+                throw new Error('A idade deve ser maior ou igual a 18 anos.');
+            }
+            // Verifica se todos os campos obrigatórios foram preenchidos
+            if (!nome || !idade || !cargo) {
+                throw new Error('Por favor, preencha todos os campos.');
+            }
+
+            let funcionario;
+
+            // Verifica o cargo selecionado e obtém o valor do campo adicional correspondente
+            let campoAdicional;
+            if (cargo === 'gerente') {
+                campoAdicional = document.getElementById('departamento').value;
+                // Verifica se o departamento foi selecionado
+                if (!campoAdicional) {
+                 throw new Error('Por favor, selecione o departamento.');
+              }
+                funcionario = new Gerente(nome, idade, campoAdicional);
+            } else if (cargo === 'desenvolvedor') {
+               campoAdicional = document.getElementById('linguagem').value;
+                // Verifica se a linguagem de programação foi selecionada
+                if (!campoAdicional) {
+                    throw new Error('Por favor, selecione a linguagem de programação.');
+                }
+                funcionario = new Desenvolvedor(nome, idade, campoAdicional);
+            }
+
+            document.getElementById('output').innerText = funcionario.seApresentar() + '\n' + funcionario.trabalhar();
+            if (funcionario instanceof Gerente) {
+            document.getElementById('output').innerText += '\n' + funcionario.gerenciar();
+            } else if (funcionario instanceof Desenvolvedor) {
+            document.getElementById('output').innerText += '\n' + funcionario.programar();
+            }
+            } catch (error) {
+            exibirErro(error.message);
+            }
+            });
+
+            function exibirErro(mensagem) {
+                document.getElementById('output').innerText = mensagem;
+            }
+    </script>
+    <script>
+        // Obtém o ano atual e o insere no rodapé
+        document.getElementById("currentYear").textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

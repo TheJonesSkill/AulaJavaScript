@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DanielTUR agencia de Turismo</title>
+</head>
+<body>
+    <h1>DanielTUR - Formulário de Reserva de Viagem</h1>
+    
+    <form action="#" method="POST">
+        <fieldset>
+            <legend>Dados Pessoais</legend>
+            <label for="nome">Nome:</label><br>
+            <input type="text" id="nome" name="nome"><br>
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email"><br>
+        </fieldset>
+
+        <fieldset>
+            <legend>Serviços Desejados</legend>
+            <input type="checkbox" id="passagens" name="servico" value="passagens">
+            <label for="passagens">Compra de Passagens</label><br>
+            <input type="checkbox" id="hospedagem" name="servico" value="hospedagem">
+            <label for="hospedagem">Reserva de Hospedagem</label><br>
+            <input type="checkbox" id="veiculos" name="servico" value="veiculos">
+            <label for="veiculos">Aluguel de Veículos</label><br>
+        </fieldset>
+
+        <fieldset>
+            <legend>Forma de Pagamento</legend>
+            <input type="radio" id="cartao" name="pagamento" value="cartao">
+            <label for="cartao">Cartão de Crédito</label><br>
+            <input type="radio" id="boleto" name="pagamento" value="boleto">
+            <label for="boleto">Boleto</label><br>
+            <input type="radio" id="pix" name="pagamento" value="pix">
+            <label for="pix">PIX</label><br>
+        </fieldset>
+
+        <fieldset>
+            <legend>Prazo de Pagamento</legend>
+            <select id="prazo" name="prazo">
+                <option value="avista">À Vista</option>
+                <option value="5vezes">Cinco Vezes Sem Juros</option>
+                <option value="10vezes">Dez Vezes Com Juros</option>
+            </select><br>
+        </fieldset>
+
+        <fieldset>
+            <legend>Comentários ou Observações</legend>
+            <textarea id="comentarios" name="comentarios" rows="4" cols="50"></textarea>
+        </fieldset>
+
+        <input type="submit" value="Enviar Reserva">
+    </form>
+</body>
+</html>
